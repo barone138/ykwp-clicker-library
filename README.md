@@ -60,11 +60,13 @@ first. An entry the clicker can't read is skipped, the others still show.
 {
   "versionCode": 17,
   "versionName": "1.6.0",
-  "url": "https://github.com/barone138/ykwp-clicker-library/releases/latest",
+  "url": "https://github.com/barone138/ykwp-clicker-library/releases/latest/download/smartautoclicker.apk",
   "notes": ""
 }
 ```
 
 When `versionCode` is higher than the installed one, the clicker puts a red ! on its i button and opens the news page
 once, with a Download button that opens `url` and the `notes` text. To publish a version, attach the APK to a release
-of this repository, then raise `versionCode` and `versionName` here to the ones of the new APK.
+of this repository with the file name `smartautoclicker.apk`, then raise `versionCode` and `versionName` here to the
+ones of the new APK. The `url` always downloads the APK of the latest release, and ADB-YKWP-Dual's **Install
+clicker** downloads it from the same link.
