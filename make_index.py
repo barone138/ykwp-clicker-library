@@ -1,4 +1,6 @@
-"""Rebuilds index.json from the clicker backups in configs/, keeping the descriptions and authors already written."""
+"""Rebuilds index.json from the clicker backups in configs/, keeping the names, descriptions, authors, tags and
+screens already written."""
+import hashlib
 import json
 import zipfile
 from urllib.parse import quote
@@ -29,8 +31,9 @@ def main() -> None:
     for path in sorted((HERE / "configs").glob("*.zip")):
         file = f"configs/{quote(path.name)}"
         found = describe(path)
-        entry = {"name": found["name"], "description": "", "author": "", "tags": [], **known.get(file, {}),
-                 "screen": found["screen"], "events": found["events"], "file": file}
+        entry = {"name": found["name"], "description": "", "author": "", "tags": [], "screen": found["screen"],
+                 **known.get(file, {}), "events": found["events"], "file": file,
+                 "sha": hashlib.sha256(path.read_bytes()).hexdigest()[:12]}
         configs.append(entry)
         print(f"{file}: {entry['name']} ({entry['screen'] or 'unknown screen'}, {entry['events']} events)")
     INDEX.write_text(json.dumps({"configs": configs}, indent=2, ensure_ascii=False) + "\n", encoding="utf-8")
