@@ -12,7 +12,7 @@
       "name": "Score attack 1080 x 1920",
       "description": "Score Attack With Yokaiju, use Yokaiju in centre and use other a bunch of other Attack Boosters and Score Boosters",
       "author": "Barone",
-      "screen": "1080x1920",
+      "screen": "900x1600",
       "events": 5,
       "file": "configs/Kaiju%20SA.zip"
     },
