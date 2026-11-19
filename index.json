@@ -1,0 +1,36 @@
+{
+  "configs": [
+    {
+      "name": "11Throne + Use energy",
+      "description": "Auto Throne and use Energy on Jiki",
+      "author": "Barone",
+      "screen": "900x1600",
+      "events": 23,
+      "file": "configs/1Throne%20%2B%20energy.zip"
+    },
+    {
+      "name": "Score attack 1080 x 1920",
+      "description": "Score Attack With Yokaiju, use Yokaiju in centre and use other a bunch of other Attack Boosters and Score Boosters",
+      "author": "Barone",
+      "screen": "1080x1920",
+      "events": 5,
+      "file": "configs/Kaiju%20SA.zip"
+    },
+    {
+      "name": "Throne General Farm",
+      "description": "Throne General Farm",
+      "author": "Barone",
+      "screen": "900x1600",
+      "events": 15,
+      "file": "configs/Throne%20General%20Farm.zip"
+    },
+    {
+      "name": "WORM AUTO",
+      "description": "Wormie",
+      "author": "Idk",
+      "screen": "900x1600",
+      "events": 29,
+      "file": "configs/WORM%20AUTO.zip"
+    }
+  ]
+}
