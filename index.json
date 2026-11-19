@@ -4,6 +4,7 @@
       "name": "gow 100 tales 2",
       "description": "",
       "author": "",
+      "tags": [],
       "screen": "900x1600",
       "events": 48,
       "file": "configs/100%20tales%20fixed.zip"
@@ -12,6 +13,7 @@
       "name": "gow 100 tale part 4 fixed",
       "description": "",
       "author": "",
+      "tags": [],
       "screen": "900x1600",
       "events": 56,
       "file": "configs/100%20tales%20part%204%20mid%20event.zip"
@@ -20,6 +22,7 @@
       "name": "11Throne + Use energy",
       "description": "Auto Throne and use Energy on Jiki",
       "author": "Barone",
+      "tags": [],
       "screen": "900x1600",
       "events": 23,
       "file": "configs/1Throne%20%2B%20energy.zip"
@@ -28,6 +31,7 @@
       "name": "720 x 1280 Auto Map | Select Stages ",
       "description": "",
       "author": "",
+      "tags": [],
       "screen": "720x1280",
       "events": 27,
       "file": "configs/720%20x%201280%20Auto%20Map%20_%20Select%20Stages%20.zip"
@@ -36,6 +40,7 @@
       "name": "99gatti",
       "description": "",
       "author": "",
+      "tags": [],
       "screen": "900x1600",
       "events": 65,
       "file": "configs/99gatti.zip"
@@ -44,6 +49,7 @@
       "name": "create account",
       "description": "",
       "author": "",
+      "tags": [],
       "screen": "900x1600",
       "events": 26,
       "file": "configs/9Create%20account.zip"
@@ -52,6 +58,7 @@
       "name": "Score attack 1080 x 1920",
       "description": "Score Attack With Yokaiju, use Yokaiju in centre and use other a bunch of other Attack Boosters and Score Boosters",
       "author": "Barone",
+      "tags": [],
       "screen": "900x1600",
       "events": 5,
       "file": "configs/Kaiju%20SA.zip"
@@ -60,6 +67,7 @@
       "name": "pseudoclicker",
       "description": "",
       "author": "",
+      "tags": [],
       "screen": "900x1600",
       "events": 59,
       "file": "configs/pseudoclicker.zip"
@@ -68,6 +76,7 @@
       "name": "Score attack 1080 x 1920",
       "description": "",
       "author": "",
+      "tags": [],
       "screen": "900x1600",
       "events": 5,
       "file": "configs/score%20shrap.zip"
@@ -76,6 +85,7 @@
       "name": "Score attack",
       "description": "",
       "author": "",
+      "tags": [],
       "screen": "1080x1920",
       "events": 5,
       "file": "configs/Scoreattack2-Backup.zip"
@@ -84,6 +94,7 @@
       "name": "spirits",
       "description": "",
       "author": "",
+      "tags": [],
       "screen": "900x1600",
       "events": 3,
       "file": "configs/Spirits.zip"
@@ -92,6 +103,7 @@
       "name": "stage 45 prefill",
       "description": "",
       "author": "",
+      "tags": [],
       "screen": "900x1600",
       "events": 15,
       "file": "configs/stage%2045%20prefill-Backup.zip"
@@ -100,6 +112,7 @@
       "name": "Throne General Farm",
       "description": "Throne General Farm",
       "author": "Barone",
+      "tags": [],
       "screen": "900x1600",
       "events": 15,
       "file": "configs/Throne%20General%20Farm.zip"
@@ -108,6 +121,7 @@
       "name": "tutorial",
       "description": "",
       "author": "",
+      "tags": [],
       "screen": "900x1600",
       "events": 29,
       "file": "configs/TUTORIAL.zip"
@@ -116,6 +130,7 @@
       "name": "VIP Auto",
       "description": "",
       "author": "",
+      "tags": [],
       "screen": "1080x1920",
       "events": 1,
       "file": "configs/VIP%20auto.zip"
@@ -124,6 +139,7 @@
       "name": "create account",
       "description": "",
       "author": "",
+      "tags": [],
       "screen": "900x1600",
       "events": 33,
       "file": "configs/wibwobaccount.zip"
@@ -132,6 +148,7 @@
       "name": "WORM AUTO",
       "description": "Wormie",
       "author": "Idk",
+      "tags": [],
       "screen": "900x1600",
       "events": 29,
       "file": "configs/WORM%20AUTO.zip"
@@ -140,6 +157,7 @@
       "name": "throne befriend config zodiac",
       "description": "",
       "author": "",
+      "tags": [],
       "screen": "900x1600",
       "events": 15,
       "file": "configs/zodiac-Backup.zip"

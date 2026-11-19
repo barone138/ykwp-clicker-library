@@ -29,7 +29,7 @@ def main() -> None:
     for path in sorted((HERE / "configs").glob("*.zip")):
         file = f"configs/{quote(path.name)}"
         found = describe(path)
-        entry = {"name": found["name"], "description": "", "author": "", **known.get(file, {}),
+        entry = {"name": found["name"], "description": "", "author": "", "tags": [], **known.get(file, {}),
                  "screen": found["screen"], "events": found["events"], "file": file}
         configs.append(entry)
         print(f"{file}: {entry['name']} ({entry['screen'] or 'unknown screen'}, {entry['events']} events)")
