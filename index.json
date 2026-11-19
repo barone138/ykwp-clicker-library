@@ -1,3 +1,14 @@
 {
-  "configs": []
+  "configs": [
+    {
+      "name": "! 1 Ultimate Pseudo Auto",
+      "description": "Its pretty simple, it autos stage 11 on the first map. Works with both prefill and drop big strats, if youre using prefill put ur prefill yokai in the center slot (condition farms throne with mckraken revive norm soult in center)",
+      "author": "jonmat | Chris",
+      "tags": ["Pseudokai"],
+      "screen": "900x1600",
+      "events": 17,
+      "file": "configs/UltimatePseudoAutoV5.zip",
+      "sha": "9f8b59d57453"
+    }
+  ]
 }
