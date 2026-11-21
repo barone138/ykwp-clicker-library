@@ -2,9 +2,11 @@
   "configs": [
     {
       "name": "spirits",
-      "description": "",
-      "author": "",
-      "tags": [],
+      "description": "Buy Spirits",
+      "author": "Barone",
+      "tags": [
+        "General"
+      ],
       "screen": "900x1600",
       "events": 3,
       "file": "configs/Spirits.zip",
