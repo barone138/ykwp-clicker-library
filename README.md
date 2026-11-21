@@ -7,8 +7,8 @@ user with no new APK.
 ## Adding a config
 
 1. In the clicker, export the config (⋮ → Export) and copy the `.zip` into `configs/`.
-2. Run `py make_index.py`. It lists every zip of `configs/` in `index.json`, with its name, screen and number of
-   events.
+2. Run `py make_index.py`. It lists every zip of `configs/` in `index.json`, with its name, screen, number of
+   events and date.
 3. In `index.json`, fill the `description`, `author` and `tags` of the new entry, and correct its `screen` when the
    config was made for another resolution. Names, descriptions, authors, tags and screens written by hand are kept the
    next time the script runs.
@@ -30,7 +30,8 @@ delete its zip and run the script again.
       "screen": "900x1600",
       "events": 12,
       "file": "configs/stage-farm.zip",
-      "sha": "3f9a0c1d22b7"
+      "sha": "3f9a0c1d22b7",
+      "updated": "2026-11-20"
     }
   ]
 }
@@ -39,6 +40,10 @@ delete its zip and run the script again.
 `file` is relative to `index.json` and can also be a full link. `screen` is the resolution the config was made for;
 the clicker also gives it to the imported config when its export didn't keep one. `sha` is written by the script from
 the zip, so replacing a zip changes the index too.
+
+`updated` is the day the config was added or last replaced, written as year-month-day. The script fills it by itself:
+a new or replaced zip gets today's date, and the date of a zip that didn't change stays as it is, so you can also
+write it by hand. The clicker shows it next to each config and in its info page, and lists the newest configs first.
 
 Every change of `index.json` puts a red ! on the clicker's Library button, until the Library is opened.
 
@@ -49,8 +54,8 @@ them as in this list, inside the brackets, between quotes and separated by comma
 its own, and needs no new APK.
 
 The Library can be searched by name, description, author and tag, and its filter button narrows the list by resolution,
-author and tags. Configs made for the screen of the device are listed
-first. An entry the clicker can't read is skipped, the others still show.
+author and tags. The list starts with the newest configs; **Sort** switches to names. On the same date, or sorted by
+name, configs made for the screen of the device are listed first. An entry the clicker can't read is skipped, the others still show.
 
 ## New versions of the clicker
 
@@ -58,8 +63,8 @@ first. An entry the clicker can't read is skipped, the others still show.
 
 ```json
 {
-  "versionCode": 17,
-  "versionName": "1.6.0",
+  "versionCode": 19,
+  "versionName": "1.7.0",
   "url": "https://github.com/barone138/ykwp-clicker-library/releases/latest/download/smartautoclicker.apk",
   "notes": ""
 }
