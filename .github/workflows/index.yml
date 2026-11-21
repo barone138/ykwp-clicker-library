@@ -1,0 +1,42 @@
+name: Rebuild index.json
+
+on:
+  push:
+    branches: [main]
+    paths: ["configs/**", "index.json", "make_index.py"]
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: index
+  cancel-in-progress: false
+
+jobs:
+  index:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Rebuild index.json from every zip in configs
+        run: python make_index.py
+
+      - name: Save index.json
+        run: |
+          if [ -z "$(git status --porcelain -- index.json configs)" ]; then
+            echo "index.json is already up to date"
+            exit 0
+          fi
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add index.json configs
+          git commit -m "Rebuild index.json"
+          git pull --rebase origin main
+          git push origin HEAD:main

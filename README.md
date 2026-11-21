@@ -4,20 +4,48 @@ Ready-made configs for the ADB Smart AutoClicker. The clicker's **Library** (⋮
 `index.json` from this repository every time it opens, so adding, changing or removing a config here reaches every
 user with no new APK.
 
-## Adding a config
+## Adding, updating and removing a config
 
-1. In the clicker, export the config (⋮ → Export) and copy the `.zip` into `configs/`.
-2. Run `py make_index.py`. It lists every zip of `configs/` in `index.json`, with its name, screen, number of
-   events and date.
-3. In `index.json`, fill the `description`, `author` and `tags` of the new entry, and correct its `screen` when the
-   config was made for another resolution. Names, descriptions, authors, tags and screens written by hand are kept the
-   next time the script runs.
-4. Commit and push. The Library shows the change within a few minutes.
+Everything is done on GitHub, from the browser; nobody needs to run anything on their computer. Collaborators of this
+repository can change it directly.
 
-To update a config, replace its zip with the new export (same file name) and run the script again. To remove one,
-delete its zip and run the script again.
+- **Add:** in the clicker, export the config (⋮ → Export). On GitHub open the `configs` folder, press **Add file →
+  Upload files**, drop the `.zip` and press **Commit changes**. Within a minute an info file with the same name,
+  `<name>.info.json`, appears next to it: open it, press the pencil, fill the description, author and tags, and commit.
+- **Update:** upload the new export with **exactly the same file name**: it replaces the old zip, and the config gets
+  today's date.
+- **Remove:** open the zip in `configs`, press **⋯ → Delete file** and commit. Its info file goes away by itself.
+
+After every change, the **Rebuild index.json** action (Actions tab) rebuilds `index.json` from every zip in `configs`
+and saves it. The Library shows the change within a few minutes, with a red ! on its button. Never edit `index.json`
+by hand: the action writes it again from the zips and the info files.
+
+## The info file
+
+```json
+{
+  "name": "Stage farm",
+  "description": "Plays the event stages, with the stage clear and login events ready for Dual.",
+  "author": "Author",
+  "tags": ["Gates", "Energy"],
+  "screen": "900x1600"
+}
+```
+
+- `name`: the name shown in the Library.
+- `screen`: the resolution the config was made for, written as width x height. The clicker also gives it to the
+  imported config when its export didn't keep one.
+- `tags`: see Tags below.
+- `updated` (optional, like `"updated": "2026-11-20"`): forces the date shown in the Library. Leave it out and the date
+  is automatic: the day the zip was added or last replaced.
+
+Each config has its own info file, so two people editing two configs never touch the same file. If an info file has a
+mistake (a missing quote or comma), the action shows a warning on that file and the config keeps the info it had; the
+other configs are not affected. A zip that isn't a clicker export is left out with a warning too.
 
 ## index.json
+
+Written by the action, for the clicker:
 
 ```json
 {
@@ -37,15 +65,12 @@ delete its zip and run the script again.
 }
 ```
 
-`file` is relative to `index.json` and can also be a full link. `screen` is the resolution the config was made for;
-the clicker also gives it to the imported config when its export didn't keep one. `sha` is written by the script from
-the zip, so replacing a zip changes the index too.
+`events` is counted from the zip, `sha` is its fingerprint (replacing a zip changes the index, so the clicker puts a
+red ! on its Library button until the Library is opened) and `updated` is the date the Library shows next to the
+config, listing the newest first.
 
-`updated` is the day the config was added or last replaced, written as year-month-day. The script fills it by itself:
-a new or replaced zip gets today's date, and the date of a zip that didn't change stays as it is, so you can also
-write it by hand. The clicker shows it next to each config and in its info page, and lists the newest configs first.
-
-Every change of `index.json` puts a red ! on the clicker's Library button, until the Library is opened.
+`py make_index.py` does the same as the action on a computer, for testing; pull first, so the index is built from
+every config.
 
 ## Tags
 
