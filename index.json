@@ -12,6 +12,17 @@
       "file": "configs/UltimatePseudoAutoV5.zip",
       "sha": "9f8b59d57453",
       "updated": "2026-11-20"
+    },
+    {
+      "name": "altmaker",
+      "description": "",
+      "author": "",
+      "tags": [],
+      "screen": "900x1600",
+      "events": 28,
+      "file": "configs/Updated%20Altmaker.zip",
+      "sha": "580be8dfb003",
+      "updated": "2026-11-23"
     }
   ]
 }
