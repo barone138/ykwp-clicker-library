@@ -14,10 +14,13 @@
       "updated": "2026-11-20"
     },
     {
-      "name": "altmaker",
-      "description": "",
-      "author": "",
-      "tags": [],
+      "name": "Alt Maker",
+      "description": "Automatically plays the first 15 stages from profile creation to boss stage, all you need to do is create the profile and enter a name, the auto should take care of the rest.",
+      "author": "Pizza",
+      "tags": [
+        "Alts",
+        "Comeback"
+      ],
       "screen": "900x1600",
       "events": 28,
       "file": "configs/Updated%20Altmaker.zip",
