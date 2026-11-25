@@ -1,12 +1,13 @@
-"""Publishes a config posted by a creator from the clicker.
+"""Publishes or removes a config for a creator, as asked from the clicker.
 
-The clicker pushes a post on its own submit/... branch: configs/<name>.zip, configs/<name>.info.json and
-submission.json, signed with the creator key. This checks the post, then copies it to main, rebuilds index.json and
-deletes the branch. A post is refused when:
+The clicker pushes a request on its own submit/... branch, signed with the creator key in submission.json:
+- post: configs/<name>.zip and configs/<name>.info.json, copied to main;
+- remove: nothing else, the config and its info file are deleted from main.
+Then index.json is rebuilt and the branch deleted. A request is refused when:
 - the signature doesn't match the key of its author in the CREATORS secret ({"Name": "key", ...});
-- it touches other files than its zip, its info and submission.json;
-- its zip is not a clicker export;
-- a config with the same name already belongs to another author.
+- it touches other files than the ones of its config and submission.json;
+- the zip of a post is not a clicker export;
+- the config belongs to another author, or a config to remove doesn't exist.
 
 Run by .github/workflows/submission.yml with the BRANCH and CREATORS environment variables, on a checkout of main."""
 import hashlib
@@ -23,6 +24,7 @@ import make_index
 
 SUBMISSION = "submission.json"
 STEM = re.compile(r"^[\w ()-]+$")
+POST, REMOVE = "post", "remove"
 
 
 class Refused(Exception):
@@ -41,19 +43,29 @@ def read(branch: str, path: str) -> bytes:
         raise Refused(f"{path} is missing")
 
 
-def check(branch: str, creators: dict) -> tuple[str, bytes, dict]:
-    """The file name, the zip and the info of a valid post. Raises Refused otherwise."""
+def owner(file: str) -> str | None:
+    """The author of a config on main, "" when it has none, None when there is no such config."""
+    if not (make_index.CONFIGS / file).exists():
+        return None
+    info = make_index.CONFIGS / f"{file[:-len('.zip')]}{make_index.INFO_SUFFIX}"
+    return (make_index.read_info(info) or {}).get("author", "") if info.exists() else ""
+
+
+def check(branch: str, creators: dict) -> tuple[str, str, str, bytes, dict]:
+    """The action, author and file of a valid request, with the zip and info of a post. Raises Refused otherwise."""
     try:
         submission = json.loads(read(branch, SUBMISSION))
-        author, file = submission["author"], submission["file"]
+        action, author, file = submission["action"], submission["author"], submission["file"]
         zip_sha, info_sha, time, signature = (submission[key] for key in ("zip_sha256", "info_sha256", "time", "signature"))
     except (ValueError, KeyError, TypeError):
         raise Refused(f"{SUBMISSION} can't be read")
+    if action not in (POST, REMOVE):
+        raise Refused(f"unknown action {action}")
 
     key = creators.get(author)
     if not isinstance(key, str) or not key:
         raise Refused(f"{author} is not a creator")
-    message = "\n".join([author, file, zip_sha, info_sha, time]).encode("utf-8")
+    message = "\n".join([action, author, file, zip_sha, info_sha, time]).encode("utf-8")
     if not hmac.compare_digest(hmac.new(key.encode("utf-8"), message, hashlib.sha256).hexdigest(), str(signature)):
         raise Refused(f"the signature of {author} doesn't match")
 
@@ -61,10 +73,18 @@ def check(branch: str, creators: dict) -> tuple[str, bytes, dict]:
     if not STEM.match(stem) or stem.startswith((" ", "-")) or stem != stem.strip():
         raise Refused(f"{file} is not a valid config name")
     zip_path, info_path = f"configs/{file}", f"configs/{stem}{make_index.INFO_SUFFIX}"
-    allowed = {zip_path, info_path, SUBMISSION}
+    allowed = {zip_path, info_path, SUBMISSION} if action == POST else {SUBMISSION}
     changed = set(git("diff", "--name-only", f"origin/main...origin/{branch}").splitlines())
     if not changed <= allowed:
-        raise Refused(f"the post changes other files: {', '.join(sorted(changed - allowed))}")
+        raise Refused(f"the request changes other files: {', '.join(sorted(changed - allowed))}")
+
+    current = owner(file)
+    if current is not None and current.casefold() != author.casefold():
+        raise Refused(f"{file} belongs to {current or 'the library maintainers'}, not to {author}")
+    if action == REMOVE:
+        if current is None:
+            raise Refused(f"{file} is not in the library")
+        return action, author, file, b"", {}
 
     content = read(branch, zip_path)
     info_bytes = read(branch, info_path)
@@ -85,34 +105,35 @@ def check(branch: str, creators: dict) -> tuple[str, bytes, dict]:
         except Exception as exc:
             raise Refused(f"{file} is not a clicker export ({exc})")
 
-    owner_info = make_index.CONFIGS / f"{stem}{make_index.INFO_SUFFIX}"
-    if (make_index.CONFIGS / file).exists():
-        owner = (make_index.read_info(owner_info) or {}).get("author", "") if owner_info.exists() else ""
-        if owner.casefold() != author.casefold():
-            raise Refused(f"{file} belongs to {owner or 'the library maintainers'}, not to {author}")
-
     fields = {"name": str(info.get("name") or stem).strip(), "description": str(info.get("description") or "").strip(),
               "author": author, "tags": [str(tag).strip() for tag in info.get("tags") or [] if str(tag).strip()],
               "screen": str(info.get("screen") or "").strip()}
-    return file, content, fields
+    return action, author, file, content, fields
 
 
-def publish(file: str, content: bytes, info: dict) -> None:
+def apply(action: str, author: str, file: str, content: bytes, info: dict) -> None:
     stem = file[:-len(".zip")]
-    (make_index.CONFIGS / file).write_bytes(content)
-    (make_index.CONFIGS / f"{stem}{make_index.INFO_SUFFIX}").write_text(
-        json.dumps(info, indent=2, ensure_ascii=False) + "\n", encoding="utf-8")
+    zip_path = make_index.CONFIGS / file
+    info_path = make_index.CONFIGS / f"{stem}{make_index.INFO_SUFFIX}"
+    if action == POST:
+        zip_path.write_bytes(content)
+        info_path.write_text(json.dumps(info, indent=2, ensure_ascii=False) + "\n", encoding="utf-8")
+        message = f"Post {info['name']} by {author}"
+    else:
+        zip_path.unlink()
+        info_path.unlink(missing_ok=True)
+        message = f"Remove {stem} by {author}"
     make_index.main()
     git("config", "user.name", "github-actions[bot]")
     git("config", "user.email", "41898282+github-actions[bot]@users.noreply.github.com")
-    git("add", "configs", "index.json")
+    git("add", "-A", "configs", "index.json")
     if subprocess.run(["git", "diff", "--cached", "--quiet"]).returncode == 0:
         print(f"configs/{file}: already in the library as posted")
         return
-    git("commit", "-m", f"Post {info['name']} by {info['author']}")
+    git("commit", "-m", message)
     git("pull", "--rebase", "origin", "main")
     git("push", "origin", "HEAD:main")
-    print(f"configs/{file}: published for {info['author']}")
+    print(f"configs/{file}: {'published' if action == POST else 'removed'} for {author}")
 
 
 def main() -> int:
@@ -126,11 +147,10 @@ def main() -> int:
         return 1
     try:
         git("fetch", "origin", branch, "main")
-        file, content, info = check(branch, creators)
-        publish(file, content, info)
+        apply(*check(branch, creators))
         return 0
     except Refused as exc:
-        print(f"::error::Post refused: {exc}")
+        print(f"::error::Request refused: {exc}")
         return 1
     finally:
         subprocess.run(["git", "push", "origin", "--delete", branch], capture_output=True)

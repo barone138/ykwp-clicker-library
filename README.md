@@ -27,8 +27,11 @@ A creator posts a config straight from the clicker, with no GitHub account and n
 signed `submission.json` on a branch of its own (`submit/<creator>/<time>`), and the **Publish a post** action checks
 it, copies it to `configs`, rebuilds `index.json` and deletes the branch. The config is online a few minutes later.
 
-The action refuses a post when its signature doesn't match the key of its author, when it touches other files, when
-its zip isn't a clicker export, or when a config with the same name belongs to someone else. The author always comes
+**My posts** (in the clicker's ⋮ menu, for creators) lists one's own configs and removes them the same way: a signed
+request on a `submit/` branch, which the action applies by deleting the config and its info file.
+
+The action refuses a request when its signature doesn't match the key of its author, when it touches other files, when
+the zip of a post isn't a clicker export, or when the config belongs to someone else. The author always comes
 from the code, so nobody can post as another creator, and posting again with the same name updates one's own config.
 
 The maintainer makes the codes on a computer:
