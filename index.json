@@ -1,19 +1,6 @@
 {
   "configs": [
     {
-      "name": "11Grind Stage Clicker soult",
-      "description": "",
-      "author": "Barone",
-      "tags": [
-        "soult"
-      ],
-      "screen": "900x1600",
-      "events": 26,
-      "file": "configs/11Grind%20Stage%20Clicker%20soult.zip",
-      "sha": "ec531ed3f17f",
-      "updated": "2026-11-25"
-    },
-    {
       "name": "! 1 Ultimate Pseudo Auto",
       "description": "Its pretty simple, it autos stage 11 on the first map. Works with both prefill and drop big strats, if youre using prefill put ur prefill yokai in the center slot (condition farms throne with mckraken revive norm soult in center)",
       "author": "jonmat | Chris",
