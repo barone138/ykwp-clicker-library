@@ -7,7 +7,8 @@ Then index.json is rebuilt and the branch deleted. A request is refused when:
 - the signature doesn't match the key of its author in the CREATORS secret ({"Name": "key", ...});
 - it touches other files than the ones of its config and submission.json;
 - the zip of a post is not a clicker export;
-- the config belongs to another author, or a config to remove doesn't exist.
+- the config was posted by another creator, or a config to remove doesn't exist.
+The author shown in the library is the one the creator wrote, the creator who posted it is kept as its owner.
 
 Run by .github/workflows/submission.yml with the BRANCH and CREATORS environment variables, on a checkout of main."""
 import hashlib
@@ -44,11 +45,13 @@ def read(branch: str, path: str) -> bytes:
 
 
 def owner(file: str) -> str | None:
-    """The author of a config on main, "" when it has none, None when there is no such config."""
+    """The creator who posted a config on main, or its author for a config posted before the author could be changed;
+    "" when it has none, None when there is no such config."""
     if not (make_index.CONFIGS / file).exists():
         return None
     info = make_index.CONFIGS / f"{file[:-len('.zip')]}{make_index.INFO_SUFFIX}"
-    return (make_index.read_info(info) or {}).get("author", "") if info.exists() else ""
+    fields = (make_index.read_info(info) or {}) if info.exists() else {}
+    return fields.get("creator") or fields.get("author", "")
 
 
 def check(branch: str, creators: dict) -> tuple[str, str, str, bytes, dict]:
@@ -106,7 +109,8 @@ def check(branch: str, creators: dict) -> tuple[str, str, str, bytes, dict]:
             raise Refused(f"{file} is not a clicker export ({exc})")
 
     fields = {"name": str(info.get("name") or stem).strip(), "description": str(info.get("description") or "").strip(),
-              "author": author, "tags": [str(tag).strip() for tag in info.get("tags") or [] if str(tag).strip()],
+              "author": str(info.get("author") or "").strip() or author, "creator": author,
+              "tags": [str(tag).strip() for tag in info.get("tags") or [] if str(tag).strip()],
               "screen": str(info.get("screen") or "").strip()}
     return action, author, file, content, fields
 

@@ -1,7 +1,8 @@
 """Rebuilds index.json from the clicker backups in configs/.
 
 Each zip can have an info file next to it, configs/<zip name>.info.json, with the fields written by hand: name,
-description, author, tags, screen and, to force it, updated. A zip with no info file gets one, filled with what the
+description, author, tags, screen, creator (the creator who posted it, when it is not the author) and, to force it,
+updated. A zip with no info file gets one, filled with what the
 zip tells and with what index.json already said. index.json itself is never edited by hand."""
 import hashlib
 import json
@@ -15,7 +16,7 @@ HERE = Path(__file__).parent
 CONFIGS = HERE / "configs"
 INDEX = HERE / "index.json"
 INFO_SUFFIX = ".info.json"
-TEXT_FIELDS = ("name", "description", "author", "screen", "updated")
+TEXT_FIELDS = ("name", "description", "author", "creator", "screen", "updated")
 
 
 def warn(path: Path, text: str) -> None:
@@ -63,6 +64,8 @@ def read_info(path: Path) -> dict | None:
 def write_info(path: Path, entry: dict) -> None:
     fields = {"name": entry["name"], "description": entry["description"], "author": entry["author"],
               "tags": entry["tags"], "screen": entry["screen"]}
+    if entry.get("creator"):
+        fields["creator"] = entry["creator"]
     path.write_text(json.dumps(fields, indent=2, ensure_ascii=False) + "\n", encoding="utf-8")
 
 
