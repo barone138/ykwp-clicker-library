@@ -1,6 +1,6 @@
 # YKWP clicker library
 
-Ready-made configs for the ADB Smart AutoClicker. The clicker's **Library** (⋮ menu on the config list) reads
+Ready-made configs for SmartAutoclicker+. The clicker's **Library** (⋮ menu on the config list) reads
 `index.json` from this repository every time it opens, so adding, changing or removing a config here reaches every
 user with no new APK.
 
@@ -19,6 +19,30 @@ repository can change it directly.
 After every change, the **Rebuild index.json** action (Actions tab) rebuilds `index.json` from every zip in `configs`
 and saves it. The Library shows the change within a few minutes, with a red ! on its button. Never edit `index.json`
 by hand: the action writes it again from the zips and the info files.
+
+## Posting from the clicker (creators)
+
+A creator posts a config straight from the clicker, with no GitHub account and no approval: with a creator code in
+**Settings → Creator**, each config of the list has a **Post** button. The clicker pushes the zip, its info file and a
+signed `submission.json` on a branch of its own (`submit/<creator>/<time>`), and the **Publish a post** action checks
+it, copies it to `configs`, rebuilds `index.json` and deletes the branch. The config is online a few minutes later.
+
+The action refuses a post when its signature doesn't match the key of its author, when it touches other files, when
+its zip isn't a clicker export, or when a config with the same name belongs to someone else. The author always comes
+from the code, so nobody can post as another creator, and posting again with the same name updates one's own config.
+
+The maintainer makes the codes on a computer:
+
+1. On GitHub, **Settings → Developer settings → Personal access tokens → Fine-grained tokens → Generate new token**:
+   only this repository, permission **Contents: Read and write**. One token per creator, so each can be revoked alone.
+2. `py creator_code.py add "Name" <token>` prints the code to give to the creator and updates `creators.json` (kept on
+   the computer, never committed).
+3. Copy all of `creators.json` into the **CREATORS** secret of this repository (**Settings → Secrets and variables →
+   Actions**). Do it again after every change.
+
+`py creator_code.py remove "Name"` takes a creator out (update the secret and revoke the token too), and
+`py creator_code.py list` shows the creators. A token holds write access to this repository: give codes only to people
+you trust; if one is misused, revoke its token and restore the files from the history.
 
 ## The info file
 

@@ -1,0 +1,31 @@
+name: Publish a post
+
+on:
+  push:
+    branches: ["submit/**"]
+
+permissions:
+  contents: write
+
+concurrency:
+  group: index
+  cancel-in-progress: false
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: main
+          fetch-depth: 0
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Check the post and publish it
+        env:
+          BRANCH: ${{ github.ref_name }}
+          CREATORS: ${{ secrets.CREATORS }}
+        run: python publish_submission.py
